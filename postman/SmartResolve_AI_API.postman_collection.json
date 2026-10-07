@@ -1,0 +1,165 @@
+{
+  "info": {
+    "name": "SmartResolve AI - Customer Service Recovery API",
+    "_postman_id": "7aa7ffe6-6c96-48fd-b378-b22299db651f",
+    "description": "Postman Collection for SmartResolve AI Omnichannel Complaint Ingestion, Intelligence Retrieval, and Recovery Orchestration.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "instance_url",
+      "value": "https://creative-koala-krfevd-dev-ed.trailblaze.my.salesforce.com",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "{{SALESFORCE_ACCESS_TOKEN_PLACEHOLDER}}",
+      "type": "string"
+    },
+    {
+      "key": "case_id",
+      "value": "500hg00000VWNlMAAX",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Ingest Customer Complaint (Omnichannel Intake)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"subject\": \"Defective Refrigerator Breakdown\",\n  \"description\": \"My refrigerator stopped working three days ago. I called twice and nobody came. I'm extremely disappointed and want a refund.\"\n}"
+        },
+        "url": {
+          "raw": "{{instance_url}}/services/apexrest/smartresolve/v1/complaints",
+          "host": [
+            "{{instance_url}}"
+          ],
+          "path": [
+            "services",
+            "apexrest",
+            "smartresolve",
+            "v1",
+            "complaints"
+          ]
+        },
+        "description": "Exposes REST API endpoint to ingest unstructured customer complaints, immediately triggering AI sentiment classification, SLA calculation, and recovery pipeline."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Get Case Recovery Status",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{instance_url}}/services/data/v61.0/sobjects/Case/{{case_id}}?fields=Id,CaseNumber,Priority,AI_Priority__c,SLA_Risk__c,Customer_Impact__c,Repeat_Complaint__c,Human_Approval_Required__c,Resolution_Status__c",
+          "host": [
+            "{{instance_url}}"
+          ],
+          "path": [
+            "services",
+            "data",
+            "v61.0",
+            "sobjects",
+            "Case",
+            "{{case_id}}"
+          ],
+          "query": [
+            {
+              "key": "fields",
+              "value": "Id,CaseNumber,Priority,AI_Priority__c,SLA_Risk__c,Customer_Impact__c,Repeat_Complaint__c,Human_Approval_Required__c,Resolution_Status__c"
+            }
+          ]
+        },
+        "description": "Retrieves the updated Case status, AI priority, and human approval flag."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get AI Complaint Analysis Record",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{instance_url}}/services/data/v61.0/query?q=SELECT+Id,Name,Sentiment__c,Issue_Type__c,Customer_Impact__c,Repeat_Complaint__c,SLA_Risk__c,Recommended_Priority__c,Recommended_Action__c,External_Order_Status__c,External_Payment_Status__c,External_Delivery_Status__c,External_Warranty_Status__c+FROM+Complaint_Analysis__c+WHERE+Case__c='{{case_id}}'",
+          "host": [
+            "{{instance_url}}"
+          ],
+          "path": [
+            "services",
+            "data",
+            "v61.0",
+            "query"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "SELECT+Id,Name,Sentiment__c,Issue_Type__c,Customer_Impact__c,Repeat_Complaint__c,SLA_Risk__c,Recommended_Priority__c,Recommended_Action__c,External_Order_Status__c,External_Payment_Status__c,External_Delivery_Status__c,External_Warranty_Status__c+FROM+Complaint_Analysis__c+WHERE+Case__c='{{case_id}}'"
+            }
+          ]
+        },
+        "description": "Queries the structured AI analysis and verified external ERP/Payment/Logistics context."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Get Orchestrated Resolution Actions",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{instance_url}}/services/data/v61.0/query?q=SELECT+Id,Name,Action_Type__c,Action_Status__c,Recommended_By_AI__c,Human_Approval_Required__c,Action_Details__c+FROM+Resolution_Action__c+WHERE+Case__c='{{case_id}}'",
+          "host": [
+            "{{instance_url}}"
+          ],
+          "path": [
+            "services",
+            "data",
+            "v61.0",
+            "query"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "SELECT+Id,Name,Action_Type__c,Action_Status__c,Recommended_By_AI__c,Human_Approval_Required__c,Action_Details__c+FROM+Resolution_Action__c+WHERE+Case__c='{{case_id}}'"
+            }
+          ]
+        },
+        "description": "Queries the orchestrated resolution actions (Service Escalation, Refund Review, Manager Review)."
+      },
+      "response": []
+    }
+  ]
+}

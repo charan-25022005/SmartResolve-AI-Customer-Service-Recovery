@@ -1,0 +1,204 @@
+<template>
+    <lightning-card title="SmartResolve AI — Customer Service Recovery" icon-name="standard:service_crew">
+        <div slot="actions">
+            <lightning-button-group>
+                <lightning-button label="Refresh" icon-name="utility:refresh" onclick={handleRefresh}></lightning-button>
+                <lightning-button label="Run AI Pipeline" icon-name="utility:magicwand" variant="neutral" onclick={handleRunAI}></lightning-button>
+            </lightning-button-group>
+        </div>
+
+        <div class="slds-p-around_medium">
+            <!-- Core Principle Slogan Banner -->
+            <div class="slogan-banner slds-m-bottom_medium slds-p-vertical_x-small slds-p-horizontal_small">
+                <span class="slds-text-heading_small slds-text-color_inverse">
+                    <strong>AI recommends.</strong> &bull; <strong>Salesforce orchestrates.</strong> &bull; <strong>Humans decide when business risk is high.</strong>
+                </span>
+            </div>
+
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Processing Recovery Intelligence" size="medium"></lightning-spinner>
+            </template>
+
+            <template if:true={details}>
+                <!-- SECTION 1: AI COGNITIVE METRICS -->
+                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                    <!-- Priority -->
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_2-of-12">
+                        <div class="metric-card metric-priority">
+                            <div class="metric-label">PRIORITY</div>
+                            <div class="metric-value">{computedPriority}</div>
+                        </div>
+                    </div>
+                    <!-- Sentiment -->
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_2-of-12">
+                        <div class="metric-card metric-sentiment">
+                            <div class="metric-label">SENTIMENT</div>
+                            <div class="metric-value">{computedSentiment}</div>
+                        </div>
+                    </div>
+                    <!-- Issue Type -->
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_2-of-12">
+                        <div class="metric-card metric-issue">
+                            <div class="metric-label">ISSUE TYPE</div>
+                            <div class="metric-value">{computedIssueType}</div>
+                        </div>
+                    </div>
+                    <!-- Customer Impact -->
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_2-of-12">
+                        <div class="metric-card metric-impact">
+                            <div class="metric-label">CUSTOMER IMPACT</div>
+                            <div class="metric-value">{computedCustomerImpact}</div>
+                        </div>
+                    </div>
+                    <!-- Repeat Complaint -->
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_2-of-12">
+                        <div class="metric-card metric-repeat">
+                            <div class="metric-label">REPEAT COMPLAINT</div>
+                            <div class="metric-value">{computedRepeatComplaint}</div>
+                        </div>
+                    </div>
+                    <!-- SLA Risk -->
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_2-of-12">
+                        <div class="metric-card metric-sla">
+                            <div class="metric-label">SLA RISK</div>
+                            <div class="metric-value">{computedSlaRisk}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: ASYNC CUSTOMER CONTEXT (EXTERNAL INTEGRATIONS) -->
+                <div class="slds-box slds-box_small slds-theme_shade slds-m-bottom_medium">
+                    <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_x-small">
+                        <lightning-icon icon-name="utility:connected_apps" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                        <h3 class="slds-text-heading_small"><strong>Async Customer Context</strong> <span class="slds-badge slds-theme_success slds-m-left_small">Verified External Data</span></h3>
+                    </div>
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-2 slds-medium-size_3-of-12">
+                            <div class="context-item">
+                                <span class="context-title">Order Status:</span>
+                                <span class="context-pill context-green">{computedOrder}</span>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-medium-size_3-of-12">
+                            <div class="context-item">
+                                <span class="context-title">Payment Status:</span>
+                                <span class="context-pill context-green">{computedPayment}</span>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-medium-size_3-of-12">
+                            <div class="context-item">
+                                <span class="context-title">Delivery Status:</span>
+                                <span class="context-pill context-green">{computedDelivery}</span>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2 slds-medium-size_3-of-12">
+                            <div class="context-item">
+                                <span class="context-title">Warranty Status:</span>
+                                <span class="context-pill context-green">{computedWarranty}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: AI SYNTHESIS & RECOMMENDED ACTION -->
+                <div class="slds-grid slds-gutters slds-m-bottom_medium">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">
+                        <div class="slds-box slds-box_small">
+                            <p class="slds-text-title_bold slds-text-color_weak slds-m-bottom_xx-small">
+                                <lightning-icon icon-name="utility:einstein" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                                AI COMPLAINT SUMMARY (Confidence: {computedConfidence})
+                            </p>
+                            <p class="slds-text-body_regular">{computedSummary}</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                        <div class="slds-box slds-box_small slds-theme_inverse">
+                            <p class="slds-text-title_bold slds-m-bottom_xx-small">RECOMMENDED ACTION</p>
+                            <p class="slds-text-heading_small"><strong>{computedRecommendedAction}</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 4: HUMAN-IN-THE-LOOP APPROVAL CARD -->
+                <template if:true={isApprovalRequired}>
+                    <div class="approval-card slds-m-bottom_medium slds-p-around_medium">
+                        <div class="slds-grid slds-grid_vertical-align-center">
+                            <div class="slds-col slds-size_1-of-12 slds-text-align_center">
+                                <lightning-icon icon-name="utility:warning" variant="warning" size="medium"></lightning-icon>
+                            </div>
+                            <div class="slds-col slds-size_8-of-12">
+                                <h3 class="slds-text-heading_small slds-text-color_error">
+                                    <strong>HUMAN APPROVAL MANDATED: High Business Risk Detected</strong>
+                                </h3>
+                                <p class="slds-text-body_small">
+                                    Critical Priority + Repeated Service Outage + Customer Refund Request.
+                                    AI provides recommendations, but human authorization is required before executing senior escalation and financial remedies.
+                                </p>
+                            </div>
+                            <div class="slds-col slds-size_3-of-12 slds-text-align_right">
+                                <lightning-button variant="brand" label="Approve Recovery Plan" icon-name="utility:check" onclick={handleApprove}></lightning-button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:true={isResolved}>
+                    <div class="resolved-card slds-m-bottom_medium slds-p-around_medium">
+                        <div class="slds-grid slds-grid_vertical-align-center">
+                            <lightning-icon icon-name="utility:success" variant="success" size="small" class="slds-m-right_small"></lightning-icon>
+                            <div>
+                                <h3 class="slds-text-heading_small">
+                                    <strong>RECOVERY PLAN APPROVED & RESOLVED</strong>
+                                </h3>
+                                <p class="slds-text-body_small">
+                                    Human approval granted. Priority field service technician dispatched, senior team assigned, and customer recovery follow-up completed.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- SECTION 5: RESOLUTION ACTION PIPELINE -->
+                <div class="slds-m-top_medium">
+                    <h3 class="slds-text-title_bold slds-m-bottom_x-small">
+                        <lightning-icon icon-name="utility:task" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                        ORCHESTRATED RESOLUTION ACTIONS ({actionCount})
+                    </h3>
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th scope="col"><div class="slds-truncate">Action Type</div></th>
+                                <th scope="col"><div class="slds-truncate">Status</div></th>
+                                <th scope="col"><div class="slds-truncate">AI Recommended</div></th>
+                                <th scope="col"><div class="slds-truncate">Human Approval</div></th>
+                                <th scope="col"><div class="slds-truncate">Details</div></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={details.resolutionActions} for:item="act">
+                                <tr key={act.Id}>
+                                    <td><strong>{act.Action_Type__c}</strong></td>
+                                    <td>
+                                        <span class={act.statusClass}>{act.Action_Status__c}</span>
+                                    </td>
+                                    <td>
+                                        <template if:true={act.Recommended_By_AI__c}>
+                                            <lightning-icon icon-name="utility:check" size="xx-small" variant="success"></lightning-icon>
+                                        </template>
+                                    </td>
+                                    <td>
+                                        <template if:true={act.Human_Approval_Required__c}>
+                                            <lightning-badge label="Required"></lightning-badge>
+                                        </template>
+                                    </td>
+                                    <td><div class="slds-cell-wrap">{act.Action_Details__c}</div></td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+            </template>
+        </div>
+    </lightning-card>
+</template>

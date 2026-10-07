@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Action_Type__c</fullName>
+    <description>Type of action being performed or recommended.</description>
+    <externalId>false</externalId>
+    <label>Action Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Assign Team</fullName>
+                <default>false</default>
+                <label>Assign Team</label>
+            </value>
+            <value>
+                <fullName>Service Escalation</fullName>
+                <default>false</default>
+                <label>Service Escalation</label>
+            </value>
+            <value>
+                <fullName>Refund Review</fullName>
+                <default>false</default>
+                <label>Refund Review</label>
+            </value>
+            <value>
+                <fullName>Priority Escalation</fullName>
+                <default>false</default>
+                <label>Priority Escalation</label>
+            </value>
+            <value>
+                <fullName>Customer Follow-up</fullName>
+                <default>false</default>
+                <label>Customer Follow-up</label>
+            </value>
+            <value>
+                <fullName>Manager Review</fullName>
+                <default>false</default>
+                <label>Manager Review</label>
+            </value>
+            <value>
+                <fullName>External System Check</fullName>
+                <default>false</default>
+                <label>External System Check</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

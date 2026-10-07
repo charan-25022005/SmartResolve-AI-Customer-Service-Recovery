@@ -1,0 +1,75 @@
+.slogan-banner {
+    background: linear-gradient(135deg, #014486 0%, #107dac 100%);
+    border-radius: 4px;
+    text-align: center;
+}
+
+.metric-card {
+    border-radius: 6px;
+    padding: 10px 8px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.metric-label {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    opacity: 0.9;
+    margin-bottom: 2px;
+}
+
+.metric-value {
+    font-size: 13px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.metric-priority { background: #ba0517; }
+.metric-sentiment { background: #c23934; }
+.metric-issue { background: #0070d2; }
+.metric-impact { background: #d96b27; }
+.metric-repeat { background: #8e24aa; }
+.metric-sla { background: #ea001e; }
+
+.context-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    background: white;
+    border: 1px solid #dddbda;
+    border-radius: 4px;
+}
+
+.context-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #3e3e3c;
+}
+
+.context-pill {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+}
+
+.context-green {
+    background-color: #e3f5e9;
+    color: #2e844a;
+}
+
+.approval-card {
+    background: #fff8e1;
+    border-left: 5px solid #ff9800;
+    border-radius: 4px;
+}
+
+.resolved-card {
+    background: #e6f7ec;
+    border-left: 5px solid #2e844a;
+    border-radius: 4px;
+}

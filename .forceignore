@@ -1,0 +1,16 @@
+# List files or directories below to ignore them when deploying to your org.
+package.json
+package-lock.json
+
+# Built files
+.sf/
+.sfdx/
+.localdevserver/
+.vscode/
+
+# Git
+.git
+.gitignore
+
+# LWC Jest
+**/__tests__/**

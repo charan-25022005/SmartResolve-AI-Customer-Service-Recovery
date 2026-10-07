@@ -1,0 +1,9 @@
+# Git ignore
+.sf/
+.sfdx/
+.localdevserver/
+node_modules/
+.vscode/
+*.log
+.DS_Store
+Thumbs.db
